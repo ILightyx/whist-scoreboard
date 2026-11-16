@@ -503,6 +503,13 @@ input[type='checkbox'] {
 
 .input-td {
   padding: 4px;
+  /* Writing fields sit in the middle of their column, in every game. */
+  text-align: center;
+}
+
+.input-td > .input-cell,
+.input-td > .toggle-cell {
+  margin: 0 auto;
 }
 
 .sheet td.input-td:first-of-type,
