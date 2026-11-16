@@ -16,8 +16,10 @@ export default defineConfig({
     baseURL: url,
     viewport: { width: 1366, height: 1024 },
     hasTouch: true,
+    // Tests find things by their English names; the Romanian test switches language itself.
+    locale: 'en-US',
   },
-  projects: [{ name: 'tablet-chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 1024 }, hasTouch: true } }],
+  projects: [{ name: 'tablet-chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 1024 }, hasTouch: true, locale: 'en-US' } }],
   webServer: {
     command: `npm run build && npx vite preview --host 127.0.0.1 --port ${port} --strictPort`,
     url,

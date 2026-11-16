@@ -9,7 +9,8 @@ import {
   setValue,
 } from '../src/game/model';
 import { bannedBet, bettingOrder, whistRoundPlan } from '../src/rules/whist';
-import { RENTZ_CONTRACT_INFO, rentzContractFields, rentzDiamondsInDeck } from '../src/rules/rentz';
+import { en } from '../src/i18n/en';
+import { rentzContractFields, rentzDiamondsInDeck } from '../src/rules/rentz';
 
 const PLAYERS = ['Ana', 'Bogdan', 'Cristi', 'Dana'];
 
@@ -157,7 +158,7 @@ test('a full 4-player Rentz game matches the scoring model', async ({ page }) =>
     const row = computeSheet(expected).rows[round];
     const contract = row.availableContracts![random(row.availableContracts!.length - 1)];
     await page.locator('.sheet tbody tr').filter({ has: page.locator(`[data-score="Ana round ${round + 1}"]`) }).getByRole('button', { name: 'Choose' }).click();
-    await page.getByRole('button', { name: new RegExp(`^${RENTZ_CONTRACT_INFO[contract].name}`) }).click();
+    await page.getByRole('button', { name: new RegExp(`^${en[`contract.${contract}`]}`) }).click();
     expected = setContract(expected, round, contract);
     const fields = rentzContractFields(contract);
     const tricks = split(8, 4, random);
@@ -202,3 +203,29 @@ test('works offline after the first visit and keeps saved games', async ({ page,
   await expect(page.locator('[data-cell="Bogdan Bet round 1"] .cell-value')).toHaveText('1');
   await context.setOffline(false);
 });
+
+test('switches to Romanian and remembers it', async ({ page }) => {
+  await page.goto('./');
+  await page.getByRole('button', { name: 'Settings' }).click();
+  await page.getByRole('radio', { name: 'Română' }).click();
+  await expect(page.getByRole('heading', { name: 'Setări' })).toBeVisible();
+  await page.getByRole('button', { name: 'Gata' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'ro');
+
+  await page.reload();
+  await page.getByRole('button', { name: 'Joc nou' }).click();
+  await page.getByRole('radio', { name: 'Rentz' }).click();
+  await expect(page.getByText('32 de runde')).toBeVisible();
+  for (const [index, name] of PLAYERS.entries()) await page.getByLabel(`Numele jucătorului ${index + 1}`).fill(name);
+  await page.getByRole('button', { name: 'Începe jocul' }).click();
+  await expect(page.locator('.sheet thead').getByText('Luate', { exact: true }).first()).toBeVisible();
+  await page.getByRole('button', { name: 'Alege' }).first().click();
+  await page.getByRole('button', { name: /^Dame/ }).click();
+  for (const [name, queens] of [['Ana', 3], ['Bogdan', 2], ['Cristi', 0], ['Dana', 0]] as const) {
+    await enter(page, `${name} Queens round 1`, queens);
+  }
+  await expect(page.locator('.issue-row')).toHaveText('Damele însumează 5, nu 4.');
+  // Test hooks stay the same in every language; screen readers get Romanian.
+  await expect(page.locator('[data-cell="Ana Queens round 1"]')).toHaveAttribute('aria-label', 'Ana, Dame, runda 1');
+});
+

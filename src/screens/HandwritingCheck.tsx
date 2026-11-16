@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Stroke } from '../ink/raster';
 import { InkSurface } from '../ink/InkSurface';
 import { loadModel, recognize } from '../ink/recognizer';
+import { useT } from '../i18n/context';
 
 interface Sample {
   digit: number;
@@ -14,6 +15,7 @@ interface Sample {
  * your own handwriting and exports the samples (to check or fine-tune the model).
  */
 export function HandwritingCheck({ onClose }: { onClose: () => void }) {
+  const t = useT();
   const [samples, setSamples] = useState<Sample[]>([]);
   const [target, setTarget] = useState(() => Math.floor(Math.random() * 10));
   const [round, setRound] = useState(0);
@@ -35,15 +37,16 @@ export function HandwritingCheck({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="modal-backdrop">
-      <div className="dialog handwriting-check" role="dialog" aria-label="Handwriting check">
-        <h2>Handwriting check</h2>
-        <p className="muted">Write the digit below in the box, the way you would on the score sheet.</p>
+      <div className="dialog handwriting-check" role="dialog" aria-label={t('check.title')}>
+        <h2>{t('check.title')}</h2>
+        <p className="muted">{t('check.intro')}</p>
         <div className="check-target">{target}</div>
         <div className="check-pad input-cell" key={round}>
           <InkSurface
             max={9}
             banned={null}
-            label="handwriting check"
+            label={t('check.title')}
+            cellId="handwriting check"
             onStrokes={(strokes) => void record(strokes)}
             onRecognized={() => undefined}
             onClear={() => undefined}
@@ -52,8 +55,8 @@ export function HandwritingCheck({ onClose }: { onClose: () => void }) {
         </div>
         <p>
           {samples.length
-            ? `Read correctly: ${correct} of ${samples.length} (${Math.round((correct / samples.length) * 100)}%)`
-            : 'No samples yet.'}
+            ? t('check.result', { correct, total: samples.length, percent: Math.round((correct / samples.length) * 100) })
+            : t('check.noSamples')}
         </p>
         <div className="dialog-actions">
           <button
@@ -69,10 +72,10 @@ export function HandwritingCheck({ onClose }: { onClose: () => void }) {
               URL.revokeObjectURL(url);
             }}
           >
-            Export samples
+            {t('check.export')}
           </button>
           <button className="primary" onClick={onClose}>
-            Done
+            {t('common.done')}
           </button>
         </div>
       </div>

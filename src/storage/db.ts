@@ -75,6 +75,26 @@ export function storeSettings(settings: Settings): void {
   }
 }
 
+const LANGUAGE_KEY = 'scorekeeper.language';
+
+/** The chosen language code, or null to follow the device. */
+export function loadLanguageSetting(): string | null {
+  try {
+    return localStorage.getItem(LANGUAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function storeLanguageSetting(setting: string): void {
+  try {
+    if (setting === 'auto') localStorage.removeItem(LANGUAGE_KEY);
+    else localStorage.setItem(LANGUAGE_KEY, setting);
+  } catch {
+    // Not remembered: the device language is used next time.
+  }
+}
+
 const INK_STATS_KEY = 'scorekeeper.inkStats';
 
 /** How often handwriting was accepted directly vs. corrected with a candidate chip. */
