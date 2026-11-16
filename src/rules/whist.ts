@@ -3,7 +3,7 @@
 // - Entities/Managers/WhistManager/Rules/CardGameRules.gd (banned bet, score, winner)
 // src/rules/whist.test.ts checks this file against cases generated from those scripts.
 
-export const WHIST_MIN_PLAYERS = 3;
+export const WHIST_MIN_PLAYERS = 4;
 export const WHIST_MAX_PLAYERS = 6;
 
 /** Cards dealt per player in each round: n×1, 2..7, n×8, 7..2, n×1 (or the reverse starting with 8s). */
