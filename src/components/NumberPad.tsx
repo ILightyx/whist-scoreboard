@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 
 export interface NumberPadRequest {
   title: string;
@@ -11,7 +11,9 @@ export interface NumberPadRequest {
 
 /** Large-button number pad: the fallback to handwriting, usable with a pen or a finger. */
 export function NumberPad({ request, onClose }: { request: NumberPadRequest; onClose: () => void }) {
-  useEffect(() => {
+  // Layout effect: the keys work from the moment the pad is visible, so a
+  // digit typed right after tapping a cell is never lost.
+  useLayoutEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
       const digit = Number(event.key);

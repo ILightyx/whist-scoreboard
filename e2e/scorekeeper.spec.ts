@@ -41,10 +41,12 @@ async function newGame(page: Page, kind: 'Romanian Whist' | 'Rentz') {
 
 /** Tap a cell (opens the number pad) and type the value. */
 async function enter(page: Page, label: string, value: number) {
+  // Wait for the pad itself: entering a game's last value opens Standings.
+  const pad = page.locator('.number-pad');
   await page.locator(`[data-ink="${label}"]`).click();
-  await expect(page.getByRole('dialog')).toBeVisible();
+  await expect(pad).toBeVisible();
   await page.keyboard.press(String(value));
-  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(pad).toBeHidden();
 }
 
 /** Draw strokes with a synthetic pen, the way a stylus sends Pointer Events. */
