@@ -16,6 +16,13 @@
   --leader: #fff0b3;
   --ink-pen: #1e3fa8;
   --cell: 56px;
+  /* Writing fields are a bit wider than tall: room for two digits and a looser hand. */
+  --cell-extra-width: 10px;
+  --cell-width: calc(var(--cell) + var(--cell-extra-width));
+  /* Fixed column widths (see .sheet col), so choosing a contract never reflows the table. */
+  --col-round: 72px;
+  --col-score: 64px;
+  --cell-pad: 8px;
   color-scheme: light;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 18px;
@@ -338,6 +345,24 @@ input[type='checkbox'] {
   border-spacing: 0;
   margin: 0 auto;
   min-width: 100%;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.sheet col.col-round {
+  width: var(--col-round);
+}
+
+.sheet col.col-field {
+  width: calc(var(--cell-width) + var(--cell-pad));
+}
+
+.sheet col.col-taken {
+  width: calc(2 * var(--cell-width) + 4px + var(--cell-pad));
+}
+
+.sheet col.col-score {
+  width: var(--col-score);
 }
 
 .sheet thead th {
@@ -541,7 +566,7 @@ input[type='checkbox'] {
 
 .input-cell {
   position: relative;
-  width: var(--cell);
+  width: var(--cell-width);
   height: var(--cell);
   border: 1.5px solid var(--line-strong);
   border-radius: 10px;
@@ -555,20 +580,14 @@ input[type='checkbox'] {
   color: var(--ink);
 }
 
-/* Totals rows (tricks, queens, diamonds, K♥) use a 2x2 grid, so every round
-   keeps the table narrow enough for four players in portrait. */
+/* Totals rows (tricks, queens, diamonds, K♥) use a 2x2 grid of normal-size
+   squares; the Taken column is always wide enough for two of them. */
 .entry-group.fields-4 {
   display: inline-grid;
   grid-template-columns: repeat(2, auto);
   gap: 4px;
 }
 
-.entry-group.fields-4 .input-cell,
-.entry-group.fields-4 .toggle-cell {
-  width: 46px;
-  height: 46px;
-  font-size: 1.25rem;
-}
 
 .input-cell.empty {
   border-style: dashed;
@@ -632,7 +651,7 @@ input[type='checkbox'] {
 }
 
 .toggle-cell {
-  width: var(--cell);
+  width: var(--cell-width);
   height: var(--cell);
   padding: 0;
   border-radius: 10px;
@@ -792,6 +811,8 @@ input[type='checkbox'] {
 @media (max-width: 900px) {
   :root {
     --cell: 46px;
+    --col-round: 64px;
+    --col-score: 50px;
   }
   .input-cell {
     font-size: 1.4rem;
@@ -799,12 +820,6 @@ input[type='checkbox'] {
   .score-td {
     min-width: 50px;
     padding: 4px;
-  }
-  .entry-group.fields-4 .input-cell,
-  .entry-group.fields-4 .toggle-cell {
-    width: 42px;
-    height: 42px;
-    font-size: 1.15rem;
   }
   .player-head {
     padding: 6px 4px;
@@ -815,6 +830,9 @@ input[type='checkbox'] {
 @media (max-width: 700px) {
   :root {
     --cell: 42px;
+    --col-round: 52px;
+    --col-score: 44px;
+    --cell-pad: 4px;
     font-size: 16px;
   }
   .toolbar {

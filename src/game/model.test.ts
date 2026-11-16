@@ -100,3 +100,40 @@ describe('Undo and redo', () => {
     expect(history.present.kind === 'whist' && history.present.rounds[0].bets).toEqual([1, 0, null]);
   });
 });
+
+describe('"0 points wins" house rule', () => {
+  /** Plays a whole game where Ana ends on exactly 0 and Bob scores the most. */
+  function finishedGame(zeroWins: boolean): Game {
+    let game: Game = createWhistGame(['Ana', 'Bob', 'Cris', 'Dan'], 0, false, zeroWins);
+    const cards = computeSheet(game).rows.map((row) => row.cards!);
+    // Ana takes every trick (bet 0: -cards) in a set of rounds and 0 tricks (+5)
+    // in the rest; pick the set so her total is 0: sum over it of (cards + 5) = 5 × rounds.
+    const target = 5 * cards.length;
+    const reach = new Map<number, number[]>([[0, []]]);
+    cards.forEach((count, round) => {
+      for (const [sum, picked] of [...reach]) if (!reach.has(sum + count + 5)) reach.set(sum + count + 5, [...picked, round]);
+    });
+    const anaTakesAll = new Set(reach.get(target)!);
+    cards.forEach((count, round) => {
+      const taker = anaTakesAll.has(round) ? 0 : 1;
+      game = fillWhistRound(game, round, [0, 0, 0, 0], [0, 1, 2, 3].map((seat) => (seat === taker ? count : 0)));
+    });
+    return game;
+  }
+
+  it('makes the player on 0 the winner at the end', () => {
+    const sheet = computeSheet(finishedGame(true));
+    expect(sheet.finished).toBe(true);
+    expect(sheet.totals[0]).toBe(0);
+    expect(Math.max(...sheet.totals)).toBeGreaterThan(0);
+    expect(sheet.places[0]).toBe(1);
+    expect(sheet.wonOnZero).toBe(true);
+  });
+
+  it('is off unless chosen, so the highest total wins', () => {
+    const sheet = computeSheet(finishedGame(false));
+    expect(sheet.places[0]).not.toBe(1);
+    expect(sheet.wonOnZero).toBe(false);
+  });
+});
+

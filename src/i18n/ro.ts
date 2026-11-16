@@ -48,6 +48,8 @@ export const ro: Messages = {
     other: 'Fiecare jucător alege o dată fiecare dintre cele 8 jocuri: {count} de runde.',
   },
   'setup.start': 'Începe jocul',
+  'setup.zeroWins': 'Câștigă cine termină cu 0 puncte',
+  'setup.zeroWinsHelp': 'La final, câștigă jucătorul care are exact 0 puncte; dacă sunt mai mulți, împart victoria. Dacă nimeni nu are 0, câștigă cel mai mare scor.',
 
   'sheet.back': 'Înapoi la jocuri',
   'sheet.games': 'Jocuri',
@@ -66,7 +68,10 @@ export const ro: Messages = {
   'sheet.finalStandings': 'Clasament final',
   'sheet.standingsAfter': 'Clasament după runda {round}',
   'sheet.copy': 'Copiază',
-  'sheet.queenOfDiamonds': 'Totale: dama de caro contează și ca damă, și ca caro, ca în joc.',
+  'sheet.zeroWinsRule': 'Regulă a casei: câștigă jucătorul care termină cu 0 puncte.',
+  'sheet.wonOnZero': 'Câștigat prin terminarea cu 0 puncte.',
+  'sheet.nobodyOnZero': 'Nimeni nu a terminat cu 0 puncte, așa că câștigă cel mai mare scor.',
+  'sheet.totals': 'Totale: toate cartile speciale se puncteaza.',
   'sheet.cellLabel': '{player}, {field}, runda {round}',
   'sheet.padTitle': '{player} · {field} · runda {round}',
 

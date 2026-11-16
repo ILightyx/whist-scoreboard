@@ -16,7 +16,7 @@ import {
   rentzRoundCount,
   validateRentzRound,
 } from '../rules/rentz';
-import { places } from '../rules/standings';
+import { places, zeroWinsPlaces } from '../rules/standings';
 import {
   bannedBet,
   bettingOrder,
@@ -49,6 +49,8 @@ interface GameBase {
 export interface WhistGame extends GameBase {
   kind: 'whist';
   startWithEights: boolean;
+  /** House rule: a player who ends on exactly 0 points wins. Missing in older saves. */
+  zeroWins?: boolean;
   rounds: WhistRound[];
 }
 
@@ -72,7 +74,7 @@ export function newGameId(): string {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
-export function createWhistGame(players: string[], firstSeat: number, startWithEights: boolean, now = Date.now()): WhistGame {
+export function createWhistGame(players: string[], firstSeat: number, startWithEights: boolean, zeroWins = false, now = Date.now()): WhistGame {
   const plan = whistRoundPlan(players.length, startWithEights);
   return {
     id: newGameId(),
@@ -80,6 +82,7 @@ export function createWhistGame(players: string[], firstSeat: number, startWithE
     players,
     firstSeat,
     startWithEights,
+    zeroWins,
     createdAt: now,
     updatedAt: now,
     rounds: plan.map(() => ({ bets: players.map(() => null), tricks: players.map(() => null) })),
@@ -139,6 +142,8 @@ export interface Sheet {
   rows: SheetRow[];
   totals: number[];
   places: number[];
+  /** The game ended and the "0 points wins" rule decided the winner. */
+  wonOnZero: boolean;
   /** First round that is not complete, or rows.length when the game is over. */
   currentRound: number;
   finished: boolean;
@@ -184,7 +189,7 @@ function computeWhistSheet(game: WhistGame): Sheet {
       banned: banned === null ? null : { seat: lastSeat, bet: banned },
     };
   });
-  return finishSheet(rows, n);
+  return finishSheet(rows, n, game.zeroWins === true);
 }
 
 function computeRentzSheet(game: RentzGame): Sheet {
@@ -227,13 +232,16 @@ function computeRentzSheet(game: RentzGame): Sheet {
   return finishSheet(rows, n);
 }
 
-function finishSheet(rows: SheetRow[], playerCount: number): Sheet {
+function finishSheet(rows: SheetRow[], playerCount: number, zeroWins = false): Sheet {
   const totals = rows.length ? rows.reduce((last, row) => (row.scores ? row.totals : last), Array<number>(playerCount).fill(0)) : [];
   const currentRound = rows.findIndex((row) => !row.complete);
+  // The house rule only decides the final result; during play standings are by total.
+  const zeroRuleApplies = zeroWins && currentRound === -1;
   return {
     rows,
     totals,
-    places: places(totals),
+    places: zeroRuleApplies ? zeroWinsPlaces(totals) : places(totals),
+    wonOnZero: zeroRuleApplies && totals.includes(0),
     currentRound: currentRound === -1 ? rows.length : currentRound,
     finished: currentRound === -1,
   };
