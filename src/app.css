@@ -503,6 +503,13 @@ input[type='checkbox'] {
 
 .input-td {
   padding: 4px;
+  /* Writing fields sit in the middle of their column, in every game. */
+  text-align: center;
+}
+
+.input-td > .input-cell,
+.input-td > .toggle-cell {
+  margin: 0 auto;
 }
 
 .sheet td.input-td:first-of-type,
@@ -579,7 +586,11 @@ input[type='checkbox'] {
 .cell-hint {
   position: absolute;
   top: 2px;
-  right: 5px;
+  left: 3px;
+  right: 4px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
   font-size: 0.7rem;
   font-weight: 600;
   color: var(--muted);
@@ -842,6 +853,10 @@ input[type='checkbox'] {
   }
   .running {
     font-size: 1rem;
+  }
+  .cell-hint {
+    font-size: 0.62rem;
+    letter-spacing: -0.01em;
   }
   .player-head {
     height: 56px;
