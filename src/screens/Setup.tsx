@@ -20,6 +20,7 @@ export function Setup({ onStart, onCancel }: { onStart: (game: Game) => void; on
   });
   const [firstSeat, setFirstSeat] = useState(0);
   const [startWithEights, setStartWithEights] = useState(false);
+  const [zeroWins, setZeroWins] = useState(false);
   const suggestions = useMemo(recentNames, []);
   const [min, max] = LIMITS[kind];
 
@@ -93,10 +94,19 @@ export function Setup({ onStart, onCancel }: { onStart: (game: Game) => void; on
       </section>
 
       {kind === 'whist' ? (
-        <label className="check">
-          <input type="checkbox" checked={startWithEights} onChange={(event) => setStartWithEights(event.target.checked)} />
-          <span>{t('setup.startWithEights')}</span>
-        </label>
+        <>
+          <label className="check">
+            <input type="checkbox" checked={startWithEights} onChange={(event) => setStartWithEights(event.target.checked)} />
+            <span>{t('setup.startWithEights')}</span>
+          </label>
+          <label className="check">
+            <input type="checkbox" checked={zeroWins} onChange={(event) => setZeroWins(event.target.checked)} />
+            <span>
+              {t('setup.zeroWins')}
+              <small className="muted">{t('setup.zeroWinsHelp')}</small>
+            </span>
+          </label>
+        </>
       ) : (
         <p className="muted">{t('setup.rentzRounds', { count: names.length * 8 })}</p>
       )}
@@ -109,7 +119,7 @@ export function Setup({ onStart, onCancel }: { onStart: (game: Game) => void; on
           className="primary big"
           disabled={duplicate}
           onClick={() =>
-            onStart(kind === 'whist' ? createWhistGame(players, firstSeat, startWithEights) : createRentzGame(players, firstSeat))
+            onStart(kind === 'whist' ? createWhistGame(players, firstSeat, startWithEights, zeroWins) : createRentzGame(players, firstSeat))
           }
         >
           {t('setup.start')}

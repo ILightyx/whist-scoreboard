@@ -52,6 +52,8 @@ export const en = {
     other: 'Each player chooses each of the 8 contracts once: {count} rounds.',
   } satisfies Plural,
   'setup.start': 'Start',
+  'setup.zeroWins': 'Ending on 0 points wins',
+  'setup.zeroWinsHelp': 'At the end, a player on exactly 0 wins; several on 0 share the win. If nobody is on 0, the highest score wins.',
 
   'sheet.back': 'Back to games',
   'sheet.games': 'Games',
@@ -70,6 +72,9 @@ export const en = {
   'sheet.finalStandings': 'Final standings',
   'sheet.standingsAfter': 'Standings after round {round}',
   'sheet.copy': 'Copy',
+  'sheet.zeroWinsRule': 'House rule: a player who ends on 0 points wins.',
+  'sheet.wonOnZero': 'Won by ending on 0 points.',
+  'sheet.nobodyOnZero': 'Nobody ended on 0 points, so the highest score wins.',
   'sheet.totals': 'Totals: All the the special cards count.',
   'sheet.cellLabel': '{player}, {field}, round {round}',
   'sheet.padTitle': '{player} · {field} · round {round}',

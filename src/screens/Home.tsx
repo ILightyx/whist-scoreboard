@@ -21,7 +21,8 @@ export function Home({ onNewGame, onOpen }: { onNewGame: () => void; onOpen: (ga
 
   const row = (game: Game) => {
     const sheet = computeSheet(game);
-    const leader = sheet.totals.length ? sheet.totals.indexOf(Math.max(...sheet.totals)) : 0;
+    // Everyone in first place (ties share it; the "0 points wins" rule is already in places).
+    const winners = sheet.places.flatMap((place, seat) => (place === 1 ? [seat] : []));
     return (
       <li key={game.id} className="game-row">
         <button className="game-open" onClick={() => onOpen(game)}>
@@ -29,7 +30,7 @@ export function Home({ onNewGame, onOpen }: { onNewGame: () => void; onOpen: (ga
           <span className="game-players">{game.players.join(', ')}</span>
           <span className="game-progress">
             {sheet.finished
-              ? t('home.winner', { name: game.players[leader], total: sheet.totals[leader] })
+              ? t('home.winner', { name: winners.map((seat) => game.players[seat]).join(', '), total: sheet.totals[winners[0]] })
               : t('home.roundOf', { round: sheet.currentRound + 1, total: sheet.rows.length })}
           </span>
           <span className="game-date">{new Date(game.updatedAt).toLocaleString(language)}</span>

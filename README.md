@@ -16,6 +16,7 @@ card game *Whist With A Twist*.
 - **Whist:** the round plan (1s, 2–7, 8s, 7–2, 1s, or starting with 8s), who
   bets first, the banned last bet, trick-sum checks, 5 + bet / −difference
   scoring, running totals and places.
+  Optional house rule: a player who ends on exactly 0 points wins.
 - **Rentz:** each player chooses each of the 8 contracts once; each round asks
   only for what its contract needs (tricks, queens, diamonds, who took the King
   of Hearts, or finishing places), checks the totals and scores it.

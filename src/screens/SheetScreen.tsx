@@ -249,6 +249,8 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
         </table>
       </div>
 
+      {game.kind === 'whist' && game.zeroWins ? <p className="footnote muted">{t('sheet.zeroWinsRule')}</p> : null}
+
       {game.kind === 'rentz' && sheet.rows.some((row) => row.contract === 'big-totals' || row.contract === 'small-totals') ? (
         <p className="footnote muted">{t('sheet.totals')}</p>
       ) : null}
@@ -287,6 +289,9 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
         <div className="modal-backdrop" onPointerDown={() => setShowStandings(false)}>
           <div className="dialog standings" role="dialog" aria-label={t('sheet.standings')} onPointerDown={(event) => event.stopPropagation()}>
             <h2>{sheet.finished ? t('sheet.finalStandings') : t('sheet.standingsAfter', { round: sheet.currentRound })}</h2>
+            {sheet.finished && game.kind === 'whist' && game.zeroWins ? (
+              <p className="muted">{t(sheet.wonOnZero ? 'sheet.wonOnZero' : 'sheet.nobodyOnZero')}</p>
+            ) : null}
             <ol>
               {game.players
                 .map((name, seat) => ({ name, total: sheet.totals[seat], place: sheet.places[seat] }))

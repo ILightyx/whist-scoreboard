@@ -229,3 +229,14 @@ test('switches to Romanian and remembers it', async ({ page }) => {
   await expect(page.locator('[data-cell="Ana Queens round 1"]')).toHaveAttribute('aria-label', 'Ana, Dame, runda 1');
 });
 
+
+test('the "0 points wins" option is offered for Whist and shown on the sheet', async ({ page }) => {
+  await page.goto('./');
+  await page.getByRole('button', { name: 'New game' }).click();
+  await page.getByRole('radio', { name: 'Rentz' }).click();
+  await expect(page.getByText('Ending on 0 points wins')).toBeHidden();
+  await page.getByRole('radio', { name: 'Romanian Whist' }).click();
+  await page.getByText('Ending on 0 points wins').click();
+  await page.getByRole('button', { name: 'Start', exact: true }).click();
+  await expect(page.getByText('House rule: a player who ends on 0 points wins.')).toBeVisible();
+});
