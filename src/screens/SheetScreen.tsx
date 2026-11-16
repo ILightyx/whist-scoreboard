@@ -149,6 +149,24 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
 
       <div className="sheet-scroll" onScroll={(event) => setScrolled(event.currentTarget.scrollLeft > 8)}>
         <table className={`sheet ${game.kind}${scrolled ? ' scrolled' : ''}`}>
+          {/* Fixed widths: the layout stays the same whatever contracts are chosen. */}
+          <colgroup>
+            <col className="col-round" />
+            {game.players.map((name) =>
+              game.kind === 'whist' ? (
+                <Fragment key={name}>
+                  <col className="col-field" />
+                  <col className="col-field" />
+                  <col className="col-score" />
+                </Fragment>
+              ) : (
+                <Fragment key={name}>
+                  <col className="col-taken" />
+                  <col className="col-score" />
+                </Fragment>
+              ),
+            )}
+          </colgroup>
           <thead>
             <tr>
               <th className="round-col" rowSpan={2}>
