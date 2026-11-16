@@ -32,6 +32,8 @@ const FIELD_SHORT: Partial<Record<Field, string>> = { tricks: 'T', queens: 'Q', 
 export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit: () => void }) {
   const [history, setHistory] = useState(() => startHistory(initialGame));
   const [pad, setPad] = useState<NumberPadRequest | null>(null);
+  // Scrolled sideways: the first column shrinks to slim tabs at the left edge.
+  const [scrolled, setScrolled] = useState(false);
   const [picker, setPicker] = useState<number | null>(null);
   const [showStandings, setShowStandings] = useState(false);
   const game = history.present;
@@ -107,15 +109,15 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
     <main className="sheet-screen">
       <header className="toolbar">
         <button className="secondary" onClick={onExit} aria-label="Back to games">
-          ‹ Games
+          ‹<span className="label"> Games</span>
         </button>
         <h1>{game.kind === 'whist' ? 'Romanian Whist' : 'Rentz'}</h1>
         <div className="toolbar-actions">
           <button className="secondary" onClick={() => setHistory(undo)} disabled={!history.past.length} aria-label="Undo">
-            ↶ Undo
+            ↶<span className="label"> Undo</span>
           </button>
           <button className="secondary" onClick={() => setHistory(redo)} disabled={!history.future.length} aria-label="Redo">
-            ↷ Redo
+            ↷<span className="label"> Redo</span>
           </button>
           <button className="secondary" onClick={() => setShowStandings(true)}>
             Standings
@@ -136,8 +138,8 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
         </div>
       </header>
 
-      <div className="sheet-scroll">
-        <table className={`sheet ${game.kind}`}>
+      <div className="sheet-scroll" onScroll={(event) => setScrolled(event.currentTarget.scrollLeft > 8)}>
+        <table className={`sheet ${game.kind}${scrolled ? ' scrolled' : ''}`}>
           <thead>
             <tr>
               <th className="round-col" rowSpan={2}>
@@ -177,13 +179,25 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
                 <Fragment key={row.index}>
                   <tr className={classes.join(' ')}>
                     <th className="round-col">
-                      {game.kind === 'whist' ? (
-                        <span className="round-cards">{row.cards}</span>
-                      ) : (
-                        <>
-                          <span className="chooser">{game.players[row.leadSeat]}</span>
-                          {contractCell(row, locked)}
-                        </>
+                      <span className="row-full">
+                        {game.kind === 'whist' ? (
+                          <span className="round-cards">{row.cards}</span>
+                        ) : (
+                          <>
+                            <span className="chooser">{game.players[row.leadSeat]}</span>
+                            {contractCell(row, locked)}
+                          </>
+                        )}
+                      </span>
+                      {/* Shown instead while scrolled sideways; a tap scrolls back. */}
+                      {game.kind === 'rentz' && !row.contract && row.index !== sheet.currentRound ? null : (
+                        <span
+                          className="row-mini"
+                          aria-hidden="true"
+                          onClick={(event) => event.currentTarget.closest('.sheet-scroll')?.scrollTo({ left: 0, behavior: 'smooth' })}
+                        >
+                          {game.kind === 'whist' ? row.cards : row.contract ? RENTZ_CONTRACT_INFO[row.contract].short : '?'}
+                        </span>
                       )}
                     </th>
                     {game.players.map((name, seat) => (

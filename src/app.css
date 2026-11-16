@@ -364,7 +364,7 @@ input[type='checkbox'] {
   padding: 6px 8px;
   border-left: 2px solid var(--line-strong);
   vertical-align: bottom;
-  text-align: left;
+  text-align: center;
 }
 
 .player-head.leader {
@@ -378,6 +378,7 @@ input[type='checkbox'] {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 220px;
+  margin: 0 auto;
 }
 
 .player-total {
@@ -392,21 +393,66 @@ input[type='checkbox'] {
   font-size: 0.85rem;
 }
 
+/* The first column is pinned. At the left edge it reads normally; once the
+   sheet scrolls sideways (.scrolled) it turns into slim tabs on the edge that
+   let taps through, so it never hides the cells. */
 .round-col {
   position: sticky;
   left: 0;
   z-index: 1;
   background: var(--paper);
-  min-width: 72px;
-  padding: 4px 8px;
+  min-width: 60px;
+  padding: 4px 6px;
   text-align: center;
   border-right: 1px solid var(--line);
 }
 
 .sheet thead .round-col {
   z-index: 3;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--muted);
+}
+
+.row-mini {
+  display: none;
+}
+
+.sheet.scrolled .round-col {
+  background: transparent !important;
+  border-color: transparent;
+  pointer-events: none;
+}
+
+.sheet.scrolled .round-col > .row-full,
+.sheet.scrolled thead .round-col {
+  visibility: hidden;
+}
+
+.sheet.scrolled .row-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 22px;
+  height: 28px;
+  padding: 0 5px 0 3px;
+  border: 1px solid var(--line-strong);
+  border-left: 0;
+  border-radius: 0 9px 9px 0;
+  background: var(--paper);
+  box-shadow: 1px 1px 4px rgb(0 0 0 / 0.15);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.sheet.scrolled tbody tr.current .row-mini {
+  background: var(--current);
 }
 
 .round-cards {
@@ -425,8 +471,8 @@ input[type='checkbox'] {
 }
 
 .contract-chip {
-  min-height: 40px;
-  min-width: 56px;
+  min-height: 36px;
+  min-width: 52px;
   padding: 0 8px;
   font-weight: 700;
 }
@@ -598,7 +644,7 @@ input[type='checkbox'] {
 .score-td {
   min-width: 64px;
   padding: 4px 8px;
-  text-align: right;
+  text-align: center;
   font-variant-numeric: tabular-nums;
 }
 
@@ -743,9 +789,6 @@ input[type='checkbox'] {
     min-width: 50px;
     padding: 4px;
   }
-  .round-col {
-    min-width: 58px;
-  }
   .entry-group.fields-4 .input-cell,
   .entry-group.fields-4 .toggle-cell {
     width: 42px;
@@ -757,13 +800,79 @@ input[type='checkbox'] {
   }
 }
 
+/* Phones: a one-row toolbar and smaller cells, so more players fit. */
 @media (max-width: 700px) {
   :root {
-    --cell: 48px;
+    --cell: 42px;
     font-size: 16px;
   }
-  .toolbar h1 {
+  .toolbar {
+    gap: 6px;
+    padding: max(6px, env(safe-area-inset-top)) 8px 6px;
+  }
+  .toolbar h1,
+  .toolbar .label {
     display: none;
+  }
+  .toolbar button {
+    min-height: 40px;
+    padding: 0 12px;
+    font-size: 0.95rem;
+  }
+  .toolbar > button:first-child {
+    font-size: 1.3rem;
+  }
+  .toolbar-actions {
+    flex: 1;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .sheet-scroll {
+    padding: 0 4px 24px;
+  }
+  .input-cell {
+    font-size: 1.3rem;
+  }
+  .input-td {
+    padding: 3px 2px;
+  }
+  .score-td {
+    min-width: 44px;
+    padding: 2px;
+  }
+  .running {
+    font-size: 1rem;
+  }
+  .player-head {
+    height: 56px;
+    padding: 4px 2px;
+  }
+  .sheet thead tr.subhead th {
+    top: 56px;
+  }
+  .player-name {
+    max-width: 120px;
+    font-size: 0.9rem;
+  }
+  .player-total {
+    font-size: 1.1rem;
+  }
+  .round-col {
+    min-width: 40px;
+    padding: 2px 3px;
+  }
+  .round-cards {
+    font-size: 1.1rem;
+  }
+  .chooser {
+    max-width: 56px;
+    font-size: 0.65rem;
+  }
+  .contract-chip {
+    min-height: 30px;
+    min-width: 44px;
+    padding: 0 6px;
+    font-size: 0.85rem;
   }
 }
 
