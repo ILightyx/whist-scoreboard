@@ -1,0 +1,1184 @@
+{
+  "roundPlans": [
+    {
+      "players": 3,
+      "startWithEights": false,
+      "plan": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "players": 3,
+      "startWithEights": true,
+      "plan": [
+        8,
+        8,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "players": 4,
+      "startWithEights": false,
+      "plan": [
+        1,
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "players": 4,
+      "startWithEights": true,
+      "plan": [
+        8,
+        8,
+        8,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "players": 5,
+      "startWithEights": false,
+      "plan": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "players": 5,
+      "startWithEights": true,
+      "plan": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    },
+    {
+      "players": 6,
+      "startWithEights": false,
+      "plan": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "players": 6,
+      "startWithEights": true,
+      "plan": [
+        8,
+        8,
+        8,
+        8,
+        8,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    }
+  ],
+  "bannedBets": [
+    {
+      "cards": 1,
+      "bets": [
+        0,
+        0
+      ],
+      "banned": 1
+    },
+    {
+      "cards": 1,
+      "bets": [
+        1,
+        0,
+        0
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 1,
+      "bets": [
+        1
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 1,
+      "bets": [
+        1,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 1,
+      "bets": [
+        2,
+        2,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 1,
+      "bets": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "banned": 1
+    },
+    {
+      "cards": 1,
+      "bets": [
+        8,
+        0
+      ],
+      "banned": null
+    },
+    {
+      "cards": 2,
+      "bets": [
+        0,
+        0
+      ],
+      "banned": 2
+    },
+    {
+      "cards": 2,
+      "bets": [
+        1,
+        0,
+        0
+      ],
+      "banned": 1
+    },
+    {
+      "cards": 2,
+      "bets": [
+        2
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 2,
+      "bets": [
+        2,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 2,
+      "bets": [
+        2,
+        2,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 2,
+      "bets": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "banned": 2
+    },
+    {
+      "cards": 2,
+      "bets": [
+        8,
+        0
+      ],
+      "banned": null
+    },
+    {
+      "cards": 3,
+      "bets": [
+        0,
+        0
+      ],
+      "banned": 3
+    },
+    {
+      "cards": 3,
+      "bets": [
+        1,
+        0,
+        0
+      ],
+      "banned": 2
+    },
+    {
+      "cards": 3,
+      "bets": [
+        3
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 3,
+      "bets": [
+        3,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 3,
+      "bets": [
+        2,
+        2,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 3,
+      "bets": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "banned": 3
+    },
+    {
+      "cards": 3,
+      "bets": [
+        8,
+        0
+      ],
+      "banned": null
+    },
+    {
+      "cards": 4,
+      "bets": [
+        0,
+        0
+      ],
+      "banned": 4
+    },
+    {
+      "cards": 4,
+      "bets": [
+        1,
+        0,
+        0
+      ],
+      "banned": 3
+    },
+    {
+      "cards": 4,
+      "bets": [
+        4
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 4,
+      "bets": [
+        4,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 4,
+      "bets": [
+        2,
+        2,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 4,
+      "bets": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "banned": 4
+    },
+    {
+      "cards": 4,
+      "bets": [
+        8,
+        0
+      ],
+      "banned": null
+    },
+    {
+      "cards": 5,
+      "bets": [
+        0,
+        0
+      ],
+      "banned": 5
+    },
+    {
+      "cards": 5,
+      "bets": [
+        1,
+        0,
+        0
+      ],
+      "banned": 4
+    },
+    {
+      "cards": 5,
+      "bets": [
+        5
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 5,
+      "bets": [
+        5,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 5,
+      "bets": [
+        2,
+        2,
+        1
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 5,
+      "bets": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "banned": 5
+    },
+    {
+      "cards": 5,
+      "bets": [
+        8,
+        0
+      ],
+      "banned": null
+    },
+    {
+      "cards": 6,
+      "bets": [
+        0,
+        0
+      ],
+      "banned": 6
+    },
+    {
+      "cards": 6,
+      "bets": [
+        1,
+        0,
+        0
+      ],
+      "banned": 5
+    },
+    {
+      "cards": 6,
+      "bets": [
+        6
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 6,
+      "bets": [
+        6,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 6,
+      "bets": [
+        2,
+        2,
+        1
+      ],
+      "banned": 1
+    },
+    {
+      "cards": 6,
+      "bets": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "banned": 6
+    },
+    {
+      "cards": 6,
+      "bets": [
+        8,
+        0
+      ],
+      "banned": null
+    },
+    {
+      "cards": 7,
+      "bets": [
+        0,
+        0
+      ],
+      "banned": 7
+    },
+    {
+      "cards": 7,
+      "bets": [
+        1,
+        0,
+        0
+      ],
+      "banned": 6
+    },
+    {
+      "cards": 7,
+      "bets": [
+        7
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 7,
+      "bets": [
+        7,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 7,
+      "bets": [
+        2,
+        2,
+        1
+      ],
+      "banned": 2
+    },
+    {
+      "cards": 7,
+      "bets": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "banned": 7
+    },
+    {
+      "cards": 7,
+      "bets": [
+        8,
+        0
+      ],
+      "banned": null
+    },
+    {
+      "cards": 8,
+      "bets": [
+        0,
+        0
+      ],
+      "banned": 8
+    },
+    {
+      "cards": 8,
+      "bets": [
+        1,
+        0,
+        0
+      ],
+      "banned": 7
+    },
+    {
+      "cards": 8,
+      "bets": [
+        8
+      ],
+      "banned": 0
+    },
+    {
+      "cards": 8,
+      "bets": [
+        8,
+        1
+      ],
+      "banned": null
+    },
+    {
+      "cards": 8,
+      "bets": [
+        2,
+        2,
+        1
+      ],
+      "banned": 3
+    },
+    {
+      "cards": 8,
+      "bets": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "banned": 8
+    },
+    {
+      "cards": 8,
+      "bets": [
+        8,
+        0
+      ],
+      "banned": 0
+    }
+  ],
+  "roundScores": [
+    {
+      "bet": 0,
+      "tricks": 0,
+      "score": 5
+    },
+    {
+      "bet": 0,
+      "tricks": 1,
+      "score": -1
+    },
+    {
+      "bet": 0,
+      "tricks": 2,
+      "score": -2
+    },
+    {
+      "bet": 0,
+      "tricks": 3,
+      "score": -3
+    },
+    {
+      "bet": 0,
+      "tricks": 4,
+      "score": -4
+    },
+    {
+      "bet": 0,
+      "tricks": 5,
+      "score": -5
+    },
+    {
+      "bet": 0,
+      "tricks": 6,
+      "score": -6
+    },
+    {
+      "bet": 0,
+      "tricks": 7,
+      "score": -7
+    },
+    {
+      "bet": 0,
+      "tricks": 8,
+      "score": -8
+    },
+    {
+      "bet": 1,
+      "tricks": 0,
+      "score": -1
+    },
+    {
+      "bet": 1,
+      "tricks": 1,
+      "score": 6
+    },
+    {
+      "bet": 1,
+      "tricks": 2,
+      "score": -1
+    },
+    {
+      "bet": 1,
+      "tricks": 3,
+      "score": -2
+    },
+    {
+      "bet": 1,
+      "tricks": 4,
+      "score": -3
+    },
+    {
+      "bet": 1,
+      "tricks": 5,
+      "score": -4
+    },
+    {
+      "bet": 1,
+      "tricks": 6,
+      "score": -5
+    },
+    {
+      "bet": 1,
+      "tricks": 7,
+      "score": -6
+    },
+    {
+      "bet": 1,
+      "tricks": 8,
+      "score": -7
+    },
+    {
+      "bet": 2,
+      "tricks": 0,
+      "score": -2
+    },
+    {
+      "bet": 2,
+      "tricks": 1,
+      "score": -1
+    },
+    {
+      "bet": 2,
+      "tricks": 2,
+      "score": 7
+    },
+    {
+      "bet": 2,
+      "tricks": 3,
+      "score": -1
+    },
+    {
+      "bet": 2,
+      "tricks": 4,
+      "score": -2
+    },
+    {
+      "bet": 2,
+      "tricks": 5,
+      "score": -3
+    },
+    {
+      "bet": 2,
+      "tricks": 6,
+      "score": -4
+    },
+    {
+      "bet": 2,
+      "tricks": 7,
+      "score": -5
+    },
+    {
+      "bet": 2,
+      "tricks": 8,
+      "score": -6
+    },
+    {
+      "bet": 3,
+      "tricks": 0,
+      "score": -3
+    },
+    {
+      "bet": 3,
+      "tricks": 1,
+      "score": -2
+    },
+    {
+      "bet": 3,
+      "tricks": 2,
+      "score": -1
+    },
+    {
+      "bet": 3,
+      "tricks": 3,
+      "score": 8
+    },
+    {
+      "bet": 3,
+      "tricks": 4,
+      "score": -1
+    },
+    {
+      "bet": 3,
+      "tricks": 5,
+      "score": -2
+    },
+    {
+      "bet": 3,
+      "tricks": 6,
+      "score": -3
+    },
+    {
+      "bet": 3,
+      "tricks": 7,
+      "score": -4
+    },
+    {
+      "bet": 3,
+      "tricks": 8,
+      "score": -5
+    },
+    {
+      "bet": 4,
+      "tricks": 0,
+      "score": -4
+    },
+    {
+      "bet": 4,
+      "tricks": 1,
+      "score": -3
+    },
+    {
+      "bet": 4,
+      "tricks": 2,
+      "score": -2
+    },
+    {
+      "bet": 4,
+      "tricks": 3,
+      "score": -1
+    },
+    {
+      "bet": 4,
+      "tricks": 4,
+      "score": 9
+    },
+    {
+      "bet": 4,
+      "tricks": 5,
+      "score": -1
+    },
+    {
+      "bet": 4,
+      "tricks": 6,
+      "score": -2
+    },
+    {
+      "bet": 4,
+      "tricks": 7,
+      "score": -3
+    },
+    {
+      "bet": 4,
+      "tricks": 8,
+      "score": -4
+    },
+    {
+      "bet": 5,
+      "tricks": 0,
+      "score": -5
+    },
+    {
+      "bet": 5,
+      "tricks": 1,
+      "score": -4
+    },
+    {
+      "bet": 5,
+      "tricks": 2,
+      "score": -3
+    },
+    {
+      "bet": 5,
+      "tricks": 3,
+      "score": -2
+    },
+    {
+      "bet": 5,
+      "tricks": 4,
+      "score": -1
+    },
+    {
+      "bet": 5,
+      "tricks": 5,
+      "score": 10
+    },
+    {
+      "bet": 5,
+      "tricks": 6,
+      "score": -1
+    },
+    {
+      "bet": 5,
+      "tricks": 7,
+      "score": -2
+    },
+    {
+      "bet": 5,
+      "tricks": 8,
+      "score": -3
+    },
+    {
+      "bet": 6,
+      "tricks": 0,
+      "score": -6
+    },
+    {
+      "bet": 6,
+      "tricks": 1,
+      "score": -5
+    },
+    {
+      "bet": 6,
+      "tricks": 2,
+      "score": -4
+    },
+    {
+      "bet": 6,
+      "tricks": 3,
+      "score": -3
+    },
+    {
+      "bet": 6,
+      "tricks": 4,
+      "score": -2
+    },
+    {
+      "bet": 6,
+      "tricks": 5,
+      "score": -1
+    },
+    {
+      "bet": 6,
+      "tricks": 6,
+      "score": 11
+    },
+    {
+      "bet": 6,
+      "tricks": 7,
+      "score": -1
+    },
+    {
+      "bet": 6,
+      "tricks": 8,
+      "score": -2
+    },
+    {
+      "bet": 7,
+      "tricks": 0,
+      "score": -7
+    },
+    {
+      "bet": 7,
+      "tricks": 1,
+      "score": -6
+    },
+    {
+      "bet": 7,
+      "tricks": 2,
+      "score": -5
+    },
+    {
+      "bet": 7,
+      "tricks": 3,
+      "score": -4
+    },
+    {
+      "bet": 7,
+      "tricks": 4,
+      "score": -3
+    },
+    {
+      "bet": 7,
+      "tricks": 5,
+      "score": -2
+    },
+    {
+      "bet": 7,
+      "tricks": 6,
+      "score": -1
+    },
+    {
+      "bet": 7,
+      "tricks": 7,
+      "score": 12
+    },
+    {
+      "bet": 7,
+      "tricks": 8,
+      "score": -1
+    },
+    {
+      "bet": 8,
+      "tricks": 0,
+      "score": -8
+    },
+    {
+      "bet": 8,
+      "tricks": 1,
+      "score": -7
+    },
+    {
+      "bet": 8,
+      "tricks": 2,
+      "score": -6
+    },
+    {
+      "bet": 8,
+      "tricks": 3,
+      "score": -5
+    },
+    {
+      "bet": 8,
+      "tricks": 4,
+      "score": -4
+    },
+    {
+      "bet": 8,
+      "tricks": 5,
+      "score": -3
+    },
+    {
+      "bet": 8,
+      "tricks": 6,
+      "score": -2
+    },
+    {
+      "bet": 8,
+      "tricks": 7,
+      "score": -1
+    },
+    {
+      "bet": 8,
+      "tricks": 8,
+      "score": 13
+    }
+  ],
+  "winners": [
+    {
+      "scores": [
+        10,
+        4,
+        -3,
+        2
+      ],
+      "winner": 0
+    },
+    {
+      "scores": [
+        5,
+        12,
+        12,
+        0
+      ],
+      "winner": 1
+    },
+    {
+      "scores": [
+        -4,
+        -2,
+        -9
+      ],
+      "winner": 1
+    },
+    {
+      "scores": [
+        30,
+        30,
+        30,
+        1,
+        2,
+        3
+      ],
+      "winner": 0
+    }
+  ]
+}
