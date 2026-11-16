@@ -6,7 +6,10 @@ export interface InputCellProps {
   max: number;
   /** A value this cell may not take (the last bettor's banned bet). */
   banned?: number | null;
+  /** Translated description for screen readers. */
   label: string;
+  /** Stable, untranslated id for data-cell/data-ink. */
+  cellId: string;
   disabled?: boolean;
   /** Small hint shown in the corner, e.g. "≠1" or "1st". */
   hint?: string;
@@ -21,13 +24,13 @@ export interface InputCellProps {
  * a tap (or a finger, unless finger writing is on) opens the number pad.
  */
 export function InputCell(props: InputCellProps) {
-  const { value, max, banned, label, disabled, hint, invalid, onChange, onRequestPad } = props;
+  const { value, max, banned, label, cellId, disabled, hint, invalid, onChange, onRequestPad } = props;
   const classes = ['input-cell'];
   if (value === null) classes.push('empty');
   if (invalid) classes.push('invalid');
   if (disabled) classes.push('disabled');
   return (
-    <div className={classes.join(' ')} aria-label={label} data-cell={label}>
+    <div className={classes.join(' ')} aria-label={label} data-cell={cellId}>
       <span className="cell-value">{value ?? ''}</span>
       {hint ? <span className="cell-hint">{hint}</span> : null}
       {disabled ? null : (
@@ -35,6 +38,7 @@ export function InputCell(props: InputCellProps) {
           max={max}
           banned={banned ?? null}
           label={label}
+          cellId={cellId}
           onRecognized={onChange}
           onClear={() => onChange(null)}
           onTap={onRequestPad}
@@ -45,13 +49,25 @@ export function InputCell(props: InputCellProps) {
 }
 
 /** A yes/no cell (who took the King of Hearts): tap to mark. */
-export function ToggleCell({ value, label, disabled, onChange }: { value: number | null; label: string; disabled?: boolean; onChange: (value: number | null) => void }) {
+export function ToggleCell({
+  value,
+  label,
+  cellId,
+  disabled,
+  onChange,
+}: {
+  value: number | null;
+  label: string;
+  cellId: string;
+  disabled?: boolean;
+  onChange: (value: number | null) => void;
+}) {
   return (
     <button
       className={value === 1 ? 'toggle-cell on' : 'toggle-cell'}
       aria-label={label}
       aria-pressed={value === 1}
-      data-cell={label}
+      data-cell={cellId}
       disabled={disabled}
       onClick={() => onChange(value === 1 ? 0 : 1)}
     >

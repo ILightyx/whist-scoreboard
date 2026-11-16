@@ -13,6 +13,11 @@ import {
   undo,
 } from './model';
 import { RENTZ_CONTRACTS } from '../rules/rentz';
+import { describeIssue } from '../i18n/issues';
+import { translator } from '../i18n/translate';
+
+/** The first round's issues as English sentences. */
+const issueText = (game: Game) => computeSheet(game).rows[0].issues.map((issue) => describeIssue(translator('en'), issue, game.players));
 
 function fillWhistRound(game: Game, round: number, bets: number[], tricks: number[]): Game {
   let next = game;
@@ -38,13 +43,13 @@ describe('Whist sheet', () => {
     game = fillWhistRound(game, 0, [0, 0, 0], []);
     expect(computeSheet(game).rows[0].banned).toEqual({ seat: 3, bet: 1 });
     game = fillWhistRound(game, 0, [0, 0, 0, 1], [0, 0, 0, 1]);
-    expect(computeSheet(game).rows[0].issues).toEqual(["Dan bets last and can't bet 1."]);
+    expect(issueText(game)).toEqual(["Dan bets last and can't bet 1."]);
     expect(computeSheet(game).rows[0].scores).toBeNull();
   });
 
   it('flags tricks that do not add up', () => {
     const game = fillWhistRound(createWhistGame(['A', 'B', 'C'], 1, false), 0, [0, 1, 1], [1, 1, 0]);
-    expect(computeSheet(game).rows[0].issues).toEqual(['Tricks add up to 2, not 1.']);
+    expect(issueText(game)).toEqual(['Tricks add up to 2, not 1.']);
   });
 
   it('limits values to the cards dealt', () => {
@@ -70,7 +75,7 @@ describe('Rentz sheet', () => {
     [2, 1, 1].forEach((queens, seat) => (game = setValue(game, { round: 0, seat, field: 'queens' }, queens)));
     expect(computeSheet(game).rows[0].complete).toBe(false);
     game = setValue(game, { round: 0, seat: 3, field: 'queens' }, 1);
-    expect(computeSheet(game).rows[0].issues).toEqual(['Queens add up to 5, not 4.']);
+    expect(issueText(game)).toEqual(['Queens add up to 5, not 4.']);
     game = setValue(game, { round: 0, seat: 3, field: 'queens' }, 0);
     expect(computeSheet(game).rows[0].scores).toEqual([-50, -25, -25, 0]);
   });

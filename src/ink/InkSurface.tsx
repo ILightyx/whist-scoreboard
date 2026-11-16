@@ -3,6 +3,7 @@ import { countInk, loadSettings } from '../storage/db';
 import { isScratchOut, isTap } from './gestures';
 import type { Point, Stroke } from './raster';
 import { type Candidate, loadModel, recognize } from './recognizer';
+import { useT } from '../i18n/context';
 
 /** Recognise this long after the pen lifts (lets you add a second stroke, e.g. a 4 or a 7). */
 const RECOGNIZE_DELAY_MS = 450;
@@ -19,13 +20,16 @@ interface InkSurfaceProps {
   max: number;
   banned: number | null;
   label: string;
+  /** Stable id for data-ink (defaults to the label). */
+  cellId?: string;
   onRecognized: (value: number) => void;
   onClear: () => void;
   onTap: () => void;
 }
 
 /** Transparent canvas over a cell that turns handwriting into a number. */
-export function InkSurface({ max, banned, label, onRecognized, onClear, onTap, onStrokes }: InkSurfaceProps) {
+export function InkSurface({ max, banned, label, cellId, onRecognized, onClear, onTap, onStrokes }: InkSurfaceProps) {
+  const t = useT();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const strokes = useRef<Stroke[]>([]);
   const active = useRef<{ id: number; stroke: Stroke; ink: boolean } | null>(null);
@@ -154,7 +158,7 @@ export function InkSurface({ max, banned, label, onRecognized, onClear, onTap, o
         ref={canvasRef}
         className="ink-surface"
         aria-hidden="true"
-        data-ink={label}
+        data-ink={cellId ?? label}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -163,7 +167,7 @@ export function InkSurface({ max, banned, label, onRecognized, onClear, onTap, o
         }}
       />
       {candidates.length ? (
-        <div className="ink-candidates" role="group" aria-label={`Did you write… (${label})`}>
+        <div className="ink-candidates" role="group" aria-label={t('ink.didYouWrite', { cell: label })}>
           {candidates.map((candidate) => (
             <button
               key={candidate.value}
@@ -176,7 +180,7 @@ export function InkSurface({ max, banned, label, onRecognized, onClear, onTap, o
               {candidate.value}
             </button>
           ))}
-          <button className="secondary" onClick={() => setCandidates([])} aria-label="None of these">
+          <button className="secondary" onClick={() => setCandidates([])} aria-label={t('ink.noneOfThese')}>
             ✕
           </button>
         </div>

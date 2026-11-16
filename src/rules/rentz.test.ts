@@ -1,7 +1,8 @@
+import { en } from '../i18n/en';
 import { describe, expect, it } from 'vitest';
 import fixtures from './fixtures/rentz.json';
 import {
-  RENTZ_CONTRACT_INFO,
+  RENTZ_CONTRACT_SIGN,
   RENTZ_CONTRACTS,
   RENTZ_POINTS,
   rentzChooser,
@@ -23,8 +24,10 @@ describe('Rentz matches the game', () => {
     });
   });
   it.each(fixtures.contracts)('contract $index is $name ($short, sign $sign)', (c) => {
-    const info = RENTZ_CONTRACT_INFO[RENTZ_CONTRACTS[c.index]];
-    expect(info).toEqual({ name: c.name, short: c.short, sign: c.sign });
+    const contract = RENTZ_CONTRACTS[c.index];
+    expect(RENTZ_CONTRACT_SIGN[contract]).toBe(c.sign);
+    // The English names and short codes are the game's own.
+    expect([en[`contract.${contract}`], en[`contractShort.${contract}`]]).toEqual([c.name, c.short]);
   });
   it('scores every contract from counts like the game scores the captured cards', () => {
     for (const c of fixtures.playerScores) {

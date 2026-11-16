@@ -1,4 +1,5 @@
 import { useLayoutEffect } from 'react';
+import { useT } from '../i18n/context';
 
 export interface NumberPadRequest {
   title: string;
@@ -11,6 +12,7 @@ export interface NumberPadRequest {
 
 /** Large-button number pad: the fallback to handwriting, usable with a pen or a finger. */
 export function NumberPad({ request, onClose }: { request: NumberPadRequest; onClose: () => void }) {
+  const t = useT();
   // Layout effect: the keys work from the moment the pad is visible, so a
   // digit typed right after tapping a cell is never lost.
   useLayoutEffect(() => {
@@ -41,7 +43,7 @@ export function NumberPad({ request, onClose }: { request: NumberPadRequest; onC
               key={digit}
               className={digit === request.value ? 'pad-key selected' : 'pad-key'}
               disabled={digit === request.banned}
-              title={digit === request.banned ? 'Not allowed: the bets would add up to the cards dealt' : undefined}
+              title={digit === request.banned ? t('pad.notAllowed') : undefined}
               onClick={() => {
                 request.onPick(digit);
                 onClose();
@@ -59,10 +61,10 @@ export function NumberPad({ request, onClose }: { request: NumberPadRequest; onC
               onClose();
             }}
           >
-            Clear
+            {t('common.clear')}
           </button>
           <button className="secondary" onClick={onClose}>
-            Cancel
+            {t('common.cancel')}
           </button>
         </div>
       </div>

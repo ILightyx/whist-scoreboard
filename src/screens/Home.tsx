@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { computeSheet, type Game } from '../game/model';
 import { deleteGame, listGames, parseImportedGame, saveGame } from '../storage/db';
 import { SettingsPanel } from './SettingsPanel';
+import { useI18n } from '../i18n/context';
 
 export function Home({ onNewGame, onOpen }: { onNewGame: () => void; onOpen: (game: Game) => void }) {
+  const { t, language } = useI18n();
   const [games, setGames] = useState<Game[] | null>(null);
   const [message, setMessage] = useState('');
   const [showSettings, setShowSettings] = useState(false);
@@ -23,26 +25,26 @@ export function Home({ onNewGame, onOpen }: { onNewGame: () => void; onOpen: (ga
     return (
       <li key={game.id} className="game-row">
         <button className="game-open" onClick={() => onOpen(game)}>
-          <span className="game-kind">{game.kind === 'whist' ? 'Whist' : 'Rentz'}</span>
+          <span className="game-kind">{t(game.kind === 'whist' ? 'kind.whistShort' : 'kind.rentz')}</span>
           <span className="game-players">{game.players.join(', ')}</span>
           <span className="game-progress">
             {sheet.finished
-              ? `Winner: ${game.players[leader]} (${sheet.totals[leader]})`
-              : `Round ${sheet.currentRound + 1} of ${sheet.rows.length}`}
+              ? t('home.winner', { name: game.players[leader], total: sheet.totals[leader] })
+              : t('home.roundOf', { round: sheet.currentRound + 1, total: sheet.rows.length })}
           </span>
-          <span className="game-date">{new Date(game.updatedAt).toLocaleString()}</span>
+          <span className="game-date">{new Date(game.updatedAt).toLocaleString(language)}</span>
         </button>
         <button
           className="danger small"
-          aria-label={`Delete game of ${game.players.join(', ')}`}
+          aria-label={t('home.deleteGame', { players: game.players.join(', ') })}
           onClick={async () => {
-            if (window.confirm('Delete this game?')) {
+            if (window.confirm(t('home.deleteConfirm'))) {
               await deleteGame(game.id);
               void refresh();
             }
           }}
         >
-          Delete
+          {t('home.delete')}
         </button>
       </li>
     );
@@ -52,17 +54,17 @@ export function Home({ onNewGame, onOpen }: { onNewGame: () => void; onOpen: (ga
     <main className="home">
       <header className="home-header">
         <h1>Scorekeeper</h1>
-        <p className="muted">Romanian Whist and Rentz, scored for you. Works offline.</p>
+        <p className="muted">{t('home.tagline')}</p>
       </header>
       <div className="home-actions">
         <button className="primary big" onClick={onNewGame}>
-          New game
+          {t('home.newGame')}
         </button>
         <button className="secondary" onClick={() => fileInput.current?.click()}>
-          Import game
+          {t('home.import')}
         </button>
         <button className="secondary" onClick={() => setShowSettings(true)}>
-          Settings
+          {t('home.settings')}
         </button>
         <input
           ref={fileInput}
@@ -75,28 +77,28 @@ export function Home({ onNewGame, onOpen }: { onNewGame: () => void; onOpen: (ga
             if (!file) return;
             try {
               await saveGame(parseImportedGame(await file.text()));
-              setMessage('Game imported.');
+              setMessage(t('home.imported'));
               void refresh();
-            } catch (error) {
-              setMessage(error instanceof Error ? error.message : 'Could not import that file.');
+            } catch {
+              setMessage(t('home.importFailed'));
             }
           }}
         />
       </div>
       {message ? <p className="notice">{message}</p> : null}
       {games === null ? null : games.length === 0 ? (
-        <p className="muted empty-state">No games yet. Start one with “New game”.</p>
+        <p className="muted empty-state">{t('home.empty', { action: t('home.newGame') })}</p>
       ) : (
         <>
           {inProgress.length ? (
             <section>
-              <h2>In progress</h2>
+              <h2>{t('home.inProgress')}</h2>
               <ul className="game-list">{inProgress.map(row)}</ul>
             </section>
           ) : null}
           {finished.length ? (
             <section>
-              <h2>Finished</h2>
+              <h2>{t('home.finished')}</h2>
               <ul className="game-list">{finished.map(row)}</ul>
             </section>
           ) : null}

@@ -892,3 +892,20 @@ input[type='checkbox'] {
   height: 220px;
   margin: 0 auto 12px;
 }
+
+.settings-label {
+  margin: 4px 0 8px;
+  font-size: 0.95rem;
+}
+
+.dialog .segmented {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+
+.dialog .segmented button {
+  flex: 1;
+  min-height: 48px;
+  padding: 0 14px;
+}

@@ -16,10 +16,13 @@ import {
   startHistory,
   undo,
 } from '../game/model';
-import { RENTZ_CONTRACT_INFO, type RentzContract } from '../rules/rentz';
+import type { RentzContract } from '../rules/rentz';
 import { exportGame, saveGame } from '../storage/db';
+import { useI18n } from '../i18n/context';
+import { describeIssue } from '../i18n/issues';
 
-const FIELD_LABEL: Record<Field, string> = {
+/** Stable, untranslated cell ids for data-cell/data-ink (test hooks), e.g. "Ana Bet round 1". */
+const FIELD_ID: Record<Field, string> = {
   bet: 'Bet',
   tricks: 'Tricks',
   queens: 'Queens',
@@ -27,9 +30,9 @@ const FIELD_LABEL: Record<Field, string> = {
   kingOfHearts: 'King of Hearts',
   place: 'Place',
 };
-const FIELD_SHORT: Partial<Record<Field, string>> = { tricks: 'T', queens: 'Q', diamonds: '♦', kingOfHearts: 'K♥', place: '#' };
 
 export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit: () => void }) {
+  const { t } = useI18n();
   const [history, setHistory] = useState(() => startHistory(initialGame));
   const [pad, setPad] = useState<NumberPadRequest | null>(null);
   // Scrolled sideways: the first column shrinks to slim tabs at the left edge.
@@ -56,11 +59,13 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
     apply(setValue(game, cell, value));
   };
 
-  const cellLabel = (cell: CellRef) => `${game.players[cell.seat]} ${FIELD_LABEL[cell.field]} round ${cell.round + 1}`;
+  const cellId = (cell: CellRef) => `${game.players[cell.seat]} ${FIELD_ID[cell.field]} round ${cell.round + 1}`;
+  const cellParams = (cell: CellRef) => ({ player: game.players[cell.seat], field: t(`field.${cell.field}`), round: cell.round + 1 });
+  const cellLabel = (cell: CellRef) => t('sheet.cellLabel', cellParams(cell));
 
   const openPad = (cell: CellRef, banned: number | null) =>
     setPad({
-      title: `${game.players[cell.seat]} · ${FIELD_LABEL[cell.field]} · round ${cell.round + 1}`,
+      title: t('sheet.padTitle', cellParams(cell)),
       max: maxValue(game, cell.round, cell.field),
       value: getValue(game, cell),
       banned,
@@ -71,19 +76,23 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
     const cell = { round: row.index, seat, field };
     const value = getValue(game, cell);
     if (field === 'kingOfHearts') {
-      return <ToggleCell key={field} value={value} label={cellLabel(cell)} disabled={locked} onChange={(next) => change(cell, next)} />;
+      return (
+        <ToggleCell key={field} value={value} cellId={cellId(cell)} label={cellLabel(cell)} disabled={locked} onChange={(next) => change(cell, next)} />
+      );
     }
     const banned = field === 'bet' && row.banned && row.banned.seat === seat ? row.banned.bet : null;
     const hints: string[] = [];
-    if (field === 'bet' && row.leadSeat === seat) hints.push('1st');
-    if (banned !== null) hints.push(`≠${banned}`);
-    if (row.fields.length > 1 && FIELD_SHORT[field] && game.kind === 'rentz') hints.push(FIELD_SHORT[field]!);
+    // Who bets first and the banned bet only matter until the bet is written.
+    if (field === 'bet' && value === null && row.leadSeat === seat) hints.push(t('sheet.firstHint'));
+    if (banned !== null && value === null) hints.push(`≠${banned}`);
+    if (row.fields.length > 1 && field !== 'bet' && game.kind === 'rentz') hints.push(t(`fieldShort.${field}`));
     return (
       <InputCell
         key={field}
         value={value}
         max={maxValue(game, row.index, field)}
         banned={banned}
+        cellId={cellId(cell)}
         label={cellLabel(cell)}
         disabled={locked}
         hint={hints.join(' ')}
@@ -98,7 +107,7 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
     const contract = row.contract;
     return (
       <button className={contract ? 'contract-chip' : 'contract-chip empty'} disabled={locked} onClick={() => setPicker(row.index)}>
-        {contract ? RENTZ_CONTRACT_INFO[contract].short : 'Choose'}
+        {contract ? t(`contractShort.${contract}`) : t('sheet.choose')}
       </button>
     );
   };
@@ -108,19 +117,19 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
   return (
     <main className="sheet-screen">
       <header className="toolbar">
-        <button className="secondary" onClick={onExit} aria-label="Back to games">
-          ‹<span className="label"> Games</span>
+        <button className="secondary" onClick={onExit} aria-label={t('sheet.back')}>
+          ‹<span className="label"> {t('sheet.games')}</span>
         </button>
-        <h1>{game.kind === 'whist' ? 'Romanian Whist' : 'Rentz'}</h1>
+        <h1>{t(game.kind === 'whist' ? 'kind.whist' : 'kind.rentz')}</h1>
         <div className="toolbar-actions">
-          <button className="secondary" onClick={() => setHistory(undo)} disabled={!history.past.length} aria-label="Undo">
-            ↶<span className="label"> Undo</span>
+          <button className="secondary" onClick={() => setHistory(undo)} disabled={!history.past.length} aria-label={t('sheet.undo')}>
+            ↶<span className="label"> {t('sheet.undo')}</span>
           </button>
-          <button className="secondary" onClick={() => setHistory(redo)} disabled={!history.future.length} aria-label="Redo">
-            ↷<span className="label"> Redo</span>
+          <button className="secondary" onClick={() => setHistory(redo)} disabled={!history.future.length} aria-label={t('sheet.redo')}>
+            ↷<span className="label"> {t('sheet.redo')}</span>
           </button>
           <button className="secondary" onClick={() => setShowStandings(true)}>
-            Standings
+            {t('sheet.standings')}
           </button>
           <button
             className="secondary"
@@ -133,7 +142,7 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
               URL.revokeObjectURL(url);
             }}
           >
-            Export
+            {t('sheet.export')}
           </button>
         </div>
       </header>
@@ -143,7 +152,7 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
           <thead>
             <tr>
               <th className="round-col" rowSpan={2}>
-                {game.kind === 'whist' ? 'Cards' : 'Contract'}
+                {t(game.kind === 'whist' ? 'sheet.cards' : 'sheet.contract')}
               </th>
               {game.players.map((name, seat) => (
                 <th key={name} colSpan={game.kind === 'whist' ? 3 : 2} className={seat === leaderSeat && sheet.totals.some((t) => t !== 0) ? 'player-head leader' : 'player-head'}>
@@ -160,13 +169,13 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
                 <Fragment key={name}>
                   {game.kind === 'whist' ? (
                     <>
-                      <th>Bet</th>
-                      <th>Tricks</th>
+                      <th>{t('field.bet')}</th>
+                      <th>{t('field.tricks')}</th>
                     </>
                   ) : (
-                    <th>Taken</th>
+                    <th>{t('sheet.taken')}</th>
                   )}
-                  <th>Score</th>
+                  <th>{t('sheet.score')}</th>
                 </Fragment>
               ))}
             </tr>
@@ -196,7 +205,7 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
                           aria-hidden="true"
                           onClick={(event) => event.currentTarget.closest('.sheet-scroll')?.scrollTo({ left: 0, behavior: 'smooth' })}
                         >
-                          {game.kind === 'whist' ? row.cards : row.contract ? RENTZ_CONTRACT_INFO[row.contract].short : '?'}
+                          {game.kind === 'whist' ? row.cards : row.contract ? t(`contractShort.${row.contract}`) : '?'}
                         </span>
                       )}
                     </th>
@@ -230,7 +239,7 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
                   </tr>
                   {row.issues.length ? (
                     <tr className="issue-row">
-                      <td colSpan={1 + n * (game.kind === 'whist' ? 3 : 2)}>{row.issues.join(' ')}</td>
+                      <td colSpan={1 + n * (game.kind === 'whist' ? 3 : 2)}>{row.issues.map((issue) => describeIssue(t, issue, game.players)).join(' ')}</td>
                     </tr>
                   ) : null}
                 </Fragment>
@@ -241,15 +250,15 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
       </div>
 
       {game.kind === 'rentz' && sheet.rows.some((row) => row.contract === 'big-totals' || row.contract === 'small-totals') ? (
-        <p className="footnote muted">Totals: the Q♦ counts as both a queen and a diamond, as in the game.</p>
+        <p className="footnote muted">{t('sheet.queenOfDiamonds')}</p>
       ) : null}
 
       {pad ? <NumberPad request={pad} onClose={() => setPad(null)} /> : null}
 
       {picker !== null && game.kind === 'rentz' ? (
         <div className="modal-backdrop" onPointerDown={() => setPicker(null)}>
-          <div className="dialog" role="dialog" aria-label="Choose contract" onPointerDown={(event) => event.stopPropagation()}>
-            <h2>{game.players[sheet.rows[picker].leadSeat]} chooses</h2>
+          <div className="dialog" role="dialog" aria-label={t('sheet.chooseContract')} onPointerDown={(event) => event.stopPropagation()}>
+            <h2>{t('sheet.chooses', { name: game.players[sheet.rows[picker].leadSeat] })}</h2>
             <div className="contract-grid">
               {(sheet.rows[picker].availableContracts ?? []).map((contract: RentzContract) => (
                 <button
@@ -260,14 +269,14 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
                     setPicker(null);
                   }}
                 >
-                  <strong>{RENTZ_CONTRACT_INFO[contract].name}</strong>
-                  <small>{RENTZ_CONTRACT_INFO[contract].short}</small>
+                  <strong>{t(`contract.${contract}`)}</strong>
+                  <small>{t(`contractShort.${contract}`)}</small>
                 </button>
               ))}
             </div>
             <div className="dialog-actions">
               <button className="secondary" onClick={() => setPicker(null)}>
-                Cancel
+                {t('common.cancel')}
               </button>
             </div>
           </div>
@@ -276,8 +285,8 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
 
       {showStandings ? (
         <div className="modal-backdrop" onPointerDown={() => setShowStandings(false)}>
-          <div className="dialog standings" role="dialog" aria-label="Standings" onPointerDown={(event) => event.stopPropagation()}>
-            <h2>{sheet.finished ? 'Final standings' : `Standings after round ${sheet.currentRound}`}</h2>
+          <div className="dialog standings" role="dialog" aria-label={t('sheet.standings')} onPointerDown={(event) => event.stopPropagation()}>
+            <h2>{sheet.finished ? t('sheet.finalStandings') : t('sheet.standingsAfter', { round: sheet.currentRound })}</h2>
             <ol>
               {game.players
                 .map((name, seat) => ({ name, total: sheet.totals[seat], place: sheet.places[seat] }))
@@ -302,10 +311,10 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
                   void navigator.clipboard?.writeText(text);
                 }}
               >
-                Copy
+                {t('sheet.copy')}
               </button>
               <button className="primary" onClick={() => setShowStandings(false)}>
-                Close
+                {t('common.close')}
               </button>
             </div>
           </div>

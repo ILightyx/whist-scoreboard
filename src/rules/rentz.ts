@@ -33,15 +33,16 @@ export const RENTZ_CONTRACTS = [
 ] as const;
 export type RentzContract = (typeof RENTZ_CONTRACTS)[number];
 
-export const RENTZ_CONTRACT_INFO: Record<RentzContract, { name: string; short: string; sign: -1 | 0 | 1 }> = {
-  'small-bids': { name: 'Small Bids', short: 'SB', sign: -1 },
-  'big-bids': { name: 'Big Bids', short: 'BB', sign: 1 },
-  queens: { name: 'Queens', short: 'Q', sign: -1 },
-  diamonds: { name: 'Diamonds', short: 'D', sign: -1 },
-  'king-of-hearts': { name: 'King of Hearts', short: 'KH', sign: -1 },
-  'big-totals': { name: 'Big Totals', short: 'BT', sign: 1 },
-  'small-totals': { name: 'Small Totals', short: 'ST', sign: -1 },
-  rentz: { name: 'Rentz', short: 'R', sign: 0 },
+/** Whether a contract's points count for (+1) or against (-1) the player. Names live in src/i18n. */
+export const RENTZ_CONTRACT_SIGN: Record<RentzContract, -1 | 0 | 1> = {
+  'small-bids': -1,
+  'big-bids': 1,
+  queens: -1,
+  diamonds: -1,
+  'king-of-hearts': -1,
+  'big-totals': 1,
+  'small-totals': -1,
+  rentz: 0,
 };
 
 /** What a contract asks each player to enter. */
@@ -97,7 +98,7 @@ export function rentzPlayerScore(contract: RentzContract, counts: RentzPlayerCou
 }
 
 function rawRentzPlayerScore(contract: RentzContract, counts: RentzPlayerCounts, playerCount: number): number {
-  const { sign } = RENTZ_CONTRACT_INFO[contract];
+  const sign = RENTZ_CONTRACT_SIGN[contract];
   const tricks = counts.tricks ?? 0;
   const queens = counts.queens ?? 0;
   const diamonds = counts.diamonds ?? 0;

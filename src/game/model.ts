@@ -103,10 +103,19 @@ export function createRentzGame(players: string[], firstSeat: number, now = Date
 
 // --- Derived sheet ----------------------------------------------------------
 
+/** Why a round can't be scored yet; turned into text in the user's language by src/i18n/issues.ts. */
+export type SheetIssue =
+  | { kind: 'banned-bet'; seat: number; bet: number }
+  | { kind: 'tricks-total'; actual: number; expected: number }
+  | { kind: 'bet-too-high'; seat: number; max: number }
+  | { kind: 'tricks-too-high'; seat: number; max: number }
+  | { kind: 'rentz-total'; field: 'tricks' | 'queens' | 'diamonds'; actual: number; expected: number }
+  | { kind: 'king-of-hearts'; count: number }
+  | { kind: 'places-duplicate' }
+  | { kind: 'places-range'; max: number };
+
 export interface SheetRow {
   index: number;
-  /** "3" cards (Whist) or the contract's short name (Rentz). */
-  label: string;
   /** Seat that bets first (Whist) or chooses the contract (Rentz). */
   leadSeat: number;
   /** Cards per player (Whist). */
@@ -117,7 +126,7 @@ export interface SheetRow {
   /** Fields each player enters this round. */
   fields: Field[];
   complete: boolean;
-  issues: string[];
+  issues: SheetIssue[];
   /** Score per seat, once the round is complete and valid. */
   scores: number[] | null;
   /** Running totals after this round. */
@@ -149,23 +158,22 @@ function computeWhistSheet(game: WhistGame): Sheet {
     const lastSeat = order[n - 1];
     const otherBets = order.slice(0, -1).map((seat) => round.bets[seat]);
     const banned = otherBets.every((bet) => bet !== null) ? bannedBet(cards, otherBets as number[]) : null;
-    const issues = validateWhistRound(round, cards, index, game.firstSeat).map((issue) => {
+    const issues = validateWhistRound(round, cards, index, game.firstSeat).map((issue): SheetIssue => {
       switch (issue.kind) {
         case 'banned-bet':
-          return `${game.players[issue.seat]} bets last and can't bet ${issue.bet}.`;
+          return { kind: 'banned-bet', seat: issue.seat, bet: issue.bet };
         case 'tricks-total':
-          return `Tricks add up to ${issue.actual}, not ${issue.expected}.`;
+          return { kind: 'tricks-total', actual: issue.actual, expected: issue.expected };
         case 'bet-out-of-range':
-          return `${game.players[issue.seat]}'s bet is more than ${cards}.`;
+          return { kind: 'bet-too-high', seat: issue.seat, max: cards };
         case 'tricks-out-of-range':
-          return `${game.players[issue.seat]}'s tricks are more than ${cards}.`;
+          return { kind: 'tricks-too-high', seat: issue.seat, max: cards };
       }
     });
     const scores = issues.length === 0 ? scoreWhistRound(round) : null;
     if (scores) totals = totals.map((total, seat) => total + scores[seat]);
     return {
       index,
-      label: String(cards),
       leadSeat: order[0],
       cards,
       fields: ['bet', 'tricks'],
@@ -179,14 +187,6 @@ function computeWhistSheet(game: WhistGame): Sheet {
   return finishSheet(rows, n);
 }
 
-const FIELD_NAMES: Record<RentzField, string> = {
-  tricks: 'Tricks',
-  queens: 'Queens',
-  diamonds: 'Diamonds',
-  kingOfHearts: 'King of Hearts',
-  place: 'Places',
-};
-
 function computeRentzSheet(game: RentzGame): Sheet {
   const n = game.players.length;
   let totals = Array<number>(n).fill(0);
@@ -199,14 +199,14 @@ function computeRentzSheet(game: RentzGame): Sheet {
     const fields: Field[] = contract ? rentzContractFields(contract) : [];
     const complete = contract !== null && isRentzRoundComplete(contract, round.counts);
     const issues = contract
-      ? validateRentzRound(contract, round.counts).map((issue) => {
+      ? validateRentzRound(contract, round.counts).map((issue): SheetIssue => {
           switch (issue.kind) {
             case 'total':
-              return `${FIELD_NAMES[issue.field]} add up to ${issue.actual}, not ${issue.expected}.`;
+              return { kind: 'rentz-total', field: issue.field as 'tricks' | 'queens' | 'diamonds', actual: issue.actual, expected: issue.expected };
             case 'king-of-hearts-count':
-              return `Exactly one player takes the King of Hearts (${issue.actual} marked).`;
+              return { kind: 'king-of-hearts', count: issue.actual };
             case 'places':
-              return issue.detail === 'duplicate' ? 'Each place can only be used once.' : `Places go from 1 to ${n}.`;
+              return issue.detail === 'duplicate' ? { kind: 'places-duplicate' } : { kind: 'places-range', max: n };
           }
         })
       : [];
@@ -214,7 +214,6 @@ function computeRentzSheet(game: RentzGame): Sheet {
     if (scores) totals = totals.map((total, seat) => total + scores[seat]);
     return {
       index,
-      label: contract ?? '',
       leadSeat: chooser,
       contract,
       availableContracts: available,

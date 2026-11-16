@@ -3,6 +3,7 @@ import { createRentzGame, createWhistGame, type Game, type GameKind } from '../g
 import { RENTZ_MAX_PLAYERS, RENTZ_MIN_PLAYERS } from '../rules/rentz';
 import { WHIST_MAX_PLAYERS, WHIST_MIN_PLAYERS } from '../rules/whist';
 import { recentNames } from '../storage/db';
+import { useT } from '../i18n/context';
 
 const LIMITS: Record<GameKind, [number, number]> = {
   whist: [WHIST_MIN_PLAYERS, WHIST_MAX_PLAYERS],
@@ -11,6 +12,7 @@ const LIMITS: Record<GameKind, [number, number]> = {
 
 /** One screen: game, players (in seating order), who starts, Start. */
 export function Setup({ onStart, onCancel }: { onStart: (game: Game) => void; onCancel: () => void }) {
+  const t = useT();
   const [kind, setKind] = useState<GameKind>('whist');
   const [names, setNames] = useState<string[]>(() => {
     const recent = recentNames();
@@ -36,34 +38,34 @@ export function Setup({ onStart, onCancel }: { onStart: (game: Game) => void; on
     }
   };
 
-  const players = names.map((name, index) => name.trim() || `Player ${index + 1}`);
+  const players = names.map((name, index) => name.trim() || t('setup.defaultName', { n: index + 1 }));
   const duplicate = new Set(players).size !== players.length;
 
   return (
     <main className="setup">
-      <h1>New game</h1>
-      <div className="segmented" role="radiogroup" aria-label="Game">
+      <h1>{t('setup.title')}</h1>
+      <div className="segmented" role="radiogroup" aria-label={t('setup.game')}>
         {(['whist', 'rentz'] as GameKind[]).map((option) => (
           <button key={option} role="radio" aria-checked={kind === option} className={kind === option ? 'on' : ''} onClick={() => chooseKind(option)}>
-            {option === 'whist' ? 'Romanian Whist' : 'Rentz'}
+            {t(option === 'whist' ? 'kind.whist' : 'kind.rentz')}
           </button>
         ))}
       </div>
 
       <section className="setup-players">
         <div className="setup-row">
-          <h2>Players</h2>
-          <div className="stepper" aria-label="Number of players">
-            <button aria-label="Fewer players" disabled={names.length <= min} onClick={() => setCount(names.length - 1)}>
+          <h2>{t('setup.players')}</h2>
+          <div className="stepper" aria-label={t('setup.playerCount')}>
+            <button aria-label={t('setup.fewer')} disabled={names.length <= min} onClick={() => setCount(names.length - 1)}>
               −
             </button>
             <span>{names.length}</span>
-            <button aria-label="More players" disabled={names.length >= max} onClick={() => setCount(names.length + 1)}>
+            <button aria-label={t('setup.more')} disabled={names.length >= max} onClick={() => setCount(names.length + 1)}>
               +
             </button>
           </div>
         </div>
-        <p className="muted">In seating order around the table. Mark who {kind === 'whist' ? 'bets' : 'chooses the contract'} first.</p>
+        <p className="muted">{t(kind === 'whist' ? 'setup.seatingWhist' : 'setup.seatingRentz')}</p>
         <datalist id="recent-names">
           {suggestions.map((name) => (
             <option key={name} value={name} />
@@ -75,33 +77,33 @@ export function Setup({ onStart, onCancel }: { onStart: (game: Game) => void; on
               <input
                 className="name-input"
                 value={name}
-                placeholder={`Player ${index + 1}`}
+                placeholder={t('setup.defaultName', { n: index + 1 })}
                 list="recent-names"
                 autoComplete="off"
-                aria-label={`Player ${index + 1} name`}
+                aria-label={t('setup.nameLabel', { n: index + 1 })}
                 onChange={(event) => setNames((current) => current.map((value, i) => (i === index ? event.target.value : value)))}
               />
               <button className={firstSeat === index ? 'first-seat on' : 'first-seat'} aria-pressed={firstSeat === index} onClick={() => setFirstSeat(index)}>
-                {firstSeat === index ? 'Starts' : 'Start here'}
+                {t(firstSeat === index ? 'setup.starts' : 'setup.startHere')}
               </button>
             </li>
           ))}
         </ol>
-        {duplicate ? <p className="warning">Two players have the same name.</p> : null}
+        {duplicate ? <p className="warning">{t('setup.duplicate')}</p> : null}
       </section>
 
       {kind === 'whist' ? (
         <label className="check">
           <input type="checkbox" checked={startWithEights} onChange={(event) => setStartWithEights(event.target.checked)} />
-          <span>Start with the 8-card rounds</span>
+          <span>{t('setup.startWithEights')}</span>
         </label>
       ) : (
-        <p className="muted">Each player chooses each of the 8 contracts once: {names.length * 8} rounds.</p>
+        <p className="muted">{t('setup.rentzRounds', { count: names.length * 8 })}</p>
       )}
 
       <div className="setup-actions">
         <button className="secondary" onClick={onCancel}>
-          Cancel
+          {t('common.cancel')}
         </button>
         <button
           className="primary big"
@@ -110,7 +112,7 @@ export function Setup({ onStart, onCancel }: { onStart: (game: Game) => void; on
             onStart(kind === 'whist' ? createWhistGame(players, firstSeat, startWithEights) : createRentzGame(players, firstSeat))
           }
         >
-          Start
+          {t('setup.start')}
         </button>
       </div>
     </main>

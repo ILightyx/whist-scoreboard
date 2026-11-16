@@ -20,6 +20,7 @@ card game *Whist With A Twist*.
   only for what its contract needs (tricks, queens, diamonds, who took the King
   of Hearts, or finishing places), checks the totals and scores it.
 - Undo/redo, editing past rounds, autosave, game history, export/import as JSON.
+- **English and Romanian.** It follows the device language; Settings can pick one.
 
 ## Use it
 
@@ -44,6 +45,16 @@ Godot card game (a separate, private project). The game generates test cases
 from its real rules into `src/rules/fixtures/*.json`, and `npm test` must
 reproduce every case. When the game's rules change, regenerate the fixtures in
 the game project, copy them here, and update `src/rules/` until the tests pass.
+
+### Languages
+
+All text lives in `src/i18n/`: `en.ts` is the source, `ro.ts` the Romanian
+translation. To add a language, copy `ro.ts` (TypeScript then requires every
+key), translate it, and add it to `LANGUAGES` and `DICTIONARIES` in
+`src/i18n/translate.ts`. Placeholders are `{name}`; a plural message has one
+form per [CLDR plural category](https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html)
+of that language, chosen by its `{count}`. `npm test` checks that every
+translation keeps the English placeholders.
 
 ### Handwriting model
 
