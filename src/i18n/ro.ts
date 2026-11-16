@@ -66,7 +66,7 @@ export const ro: Messages = {
   'sheet.finalStandings': 'Clasament final',
   'sheet.standingsAfter': 'Clasament după runda {round}',
   'sheet.copy': 'Copiază',
-  'sheet.queenOfDiamonds': 'Totale: dama de caro contează și ca damă, și ca caro, ca în joc.',
+  'sheet.totals': 'Totale: toate cartile speciale se puncteaza.',
   'sheet.cellLabel': '{player}, {field}, runda {round}',
   'sheet.padTitle': '{player} · {field} · runda {round}',
 

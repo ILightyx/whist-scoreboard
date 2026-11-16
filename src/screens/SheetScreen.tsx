@@ -250,7 +250,7 @@ export function SheetScreen({ initialGame, onExit }: { initialGame: Game; onExit
       </div>
 
       {game.kind === 'rentz' && sheet.rows.some((row) => row.contract === 'big-totals' || row.contract === 'small-totals') ? (
-        <p className="footnote muted">{t('sheet.queenOfDiamonds')}</p>
+        <p className="footnote muted">{t('sheet.totals')}</p>
       ) : null}
 
       {pad ? <NumberPad request={pad} onClose={() => setPad(null)} /> : null}

@@ -16,6 +16,8 @@
   --leader: #fff0b3;
   --ink-pen: #1e3fa8;
   --cell: 56px;
+  /* Writing fields are a bit wider than tall: room for two digits and a looser hand. */
+  --cell-extra-width: 10px;
   color-scheme: light;
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 18px;
@@ -541,7 +543,7 @@ input[type='checkbox'] {
 
 .input-cell {
   position: relative;
-  width: var(--cell);
+  width: calc(var(--cell) + var(--cell-extra-width));
   height: var(--cell);
   border: 1.5px solid var(--line-strong);
   border-radius: 10px;
@@ -565,7 +567,7 @@ input[type='checkbox'] {
 
 .entry-group.fields-4 .input-cell,
 .entry-group.fields-4 .toggle-cell {
-  width: 46px;
+  width: calc(46px + var(--cell-extra-width));
   height: 46px;
   font-size: 1.25rem;
 }
@@ -632,7 +634,7 @@ input[type='checkbox'] {
 }
 
 .toggle-cell {
-  width: var(--cell);
+  width: calc(var(--cell) + var(--cell-extra-width));
   height: var(--cell);
   padding: 0;
   border-radius: 10px;
@@ -802,7 +804,7 @@ input[type='checkbox'] {
   }
   .entry-group.fields-4 .input-cell,
   .entry-group.fields-4 .toggle-cell {
-    width: 42px;
+    width: calc(42px + var(--cell-extra-width));
     height: 42px;
     font-size: 1.15rem;
   }

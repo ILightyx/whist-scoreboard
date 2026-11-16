@@ -70,7 +70,7 @@ export const en = {
   'sheet.finalStandings': 'Final standings',
   'sheet.standingsAfter': 'Standings after round {round}',
   'sheet.copy': 'Copy',
-  'sheet.queenOfDiamonds': 'Totals: the Q♦ counts as both a queen and a diamond, as in the game.',
+  'sheet.totals': 'Totals: All the the special cards count.',
   'sheet.cellLabel': '{player}, {field}, round {round}',
   'sheet.padTitle': '{player} · {field} · round {round}',
 
