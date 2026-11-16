@@ -68,6 +68,14 @@ under **Settings → Pages → Source: GitHub Actions**.
 `.github/workflows/ci.yml` type-checks, lints and runs the unit and
 end-to-end tests on every push and pull request.
 
+## License
+
+The code is released under the [MIT License](LICENSE).
+
+The trained handwriting model (`public/models/digits.json`) is derived from the
+MNIST dataset, which is licensed CC BY-SA 3.0; it may be subject to those terms
+rather than MIT.
+
 ## Credits
 
 The handwriting model is trained on the [MNIST](http://yann.lecun.com/exdb/mnist/)
